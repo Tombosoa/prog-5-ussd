@@ -3,7 +3,6 @@ package com.prog5.menu.engine;
 import com.prog5.menu.MenuItem;
 import com.prog5.menu.MenuFactory;
 import com.prog5.menu.action.Action;
-
 import java.util.List;
 import java.util.Stack;
 
@@ -27,7 +26,7 @@ public class USSDEngine {
     public void displayCurrentMenu() {
         System.out.println("\nYas et Moi");
         for (int i = 0; i < currentMenu.size(); i++) {
-            String title = currentMenu.get(i).getTitle();
+            final String title = currentMenu.get(i).getTitle();
             if ("Pejy manaraka".equals(title)) {
                 System.out.println("0  " + title);
             } else if ("Pejy aloha".equals(title)) {
@@ -56,14 +55,14 @@ public class USSDEngine {
             }
             default -> {
                 try {
-                    int choice = Integer.parseInt(input);
-                    int index = choice - 1;
+                    final int choice = Integer.parseInt(input);
+                    final int index = choice - 1;
                     if (index < 0 || index >= currentMenu.size()) {
                         System.out.println("Choix invalide");
                         return;
                     }
 
-                    Action selected = currentMenu.get(index);
+                    final Action selected = currentMenu.get(index);
                     if (selected instanceof MenuItem menuItem) {
                         if (menuItem.hasSubMenus()) {
                             navigateToSubMenu(menuItem);

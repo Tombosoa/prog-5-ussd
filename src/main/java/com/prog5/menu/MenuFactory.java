@@ -2,16 +2,15 @@ package com.prog5.menu;
 
 import com.prog5.menu.action.*;
 import com.prog5.menu.engine.USSDEngine;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuFactory {
 
     public static List<Action> getMainMenu(USSDEngine engine) {
-        List<Action> mainMenu = new ArrayList<>();
+        final List<Action> mainMenu = new ArrayList<>();
 
-        MenuItem mvola = new MenuItem("MVOLA");
+        final MenuItem mvola = new MenuItem("MVOLA");
         mvola.addSubMenu(new MenuItem("Envoyer argent", MvolaActions::envoyerArgent));
         mvola.addSubMenu(new MenuItem("Retirer argent", MvolaActions::retirerArgent));
         mvola.addSubMenu(new MenuItem("Consulter solde", MvolaActions::consulterSolde));
@@ -30,7 +29,7 @@ public class MenuFactory {
     }
 
     public static List<Action> getSecondMenu(USSDEngine engine) {
-        List<Action> secondMenu = new ArrayList<>();
+        final List<Action> secondMenu = new ArrayList<>();
         secondMenu.add(new MenuItem("Mon identité", YasActions::monIdentite));
         secondMenu.add(new MenuItem("Configurer mon mobile", YasActions::configurerMobile));
         secondMenu.add(new MenuItem("Pejy aloha", engine::goBack));

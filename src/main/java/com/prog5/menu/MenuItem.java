@@ -1,7 +1,6 @@
 package com.prog5.menu;
 
 import com.prog5.menu.action.Action;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,20 +1,25 @@
 package com.prog5.gui;
 
-import com.prog5.menu.engine.USSDEngine;
-import com.prog5.menu.action.Action;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import com.prog5.menu.engine.USSDEngine;
+import com.prog5.menu.action.Action;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.JScrollPane;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.Font;
 import java.util.List;
 
 public class USSDgui extends JFrame {
     private final USSDEngine engine;
     private final JTextArea displayArea;
     private final JTextField inputField;
-    private final JButton sendButton;
-    private final JButton cancelButton;
 
     public USSDgui() {
         engine = new USSDEngine();
@@ -29,18 +34,18 @@ public class USSDgui extends JFrame {
         displayArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         add(new JScrollPane(displayArea), BorderLayout.CENTER);
 
-        JPanel inputPanel = new JPanel(new BorderLayout());
+        final JPanel inputPanel = new JPanel(new BorderLayout());
         inputField = new JTextField();
         inputField.setFont(new Font("Monospaced", Font.PLAIN, 14));
         inputPanel.add(inputField, BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-        sendButton = new JButton("Send");
-        cancelButton = new JButton("Cancel");
+        final JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+        final JButton sendButton = new JButton("Send");
+        final JButton cancelButton = new JButton("Cancel");
         buttonPanel.add(sendButton);
         buttonPanel.add(cancelButton);
 
-        JPanel bottomPanel = new JPanel(new BorderLayout());
+        final JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(inputPanel, BorderLayout.NORTH);
         bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -61,7 +66,7 @@ public class USSDgui extends JFrame {
     }
 
     private void processInput() {
-        String input = inputField.getText().trim();
+        final String input = inputField.getText().trim();
         if (!input.isEmpty()) {
             engine.processInput(input);
             inputField.setText("");
@@ -70,17 +75,20 @@ public class USSDgui extends JFrame {
     }
 
     private void updateDisplay() {
-        StringBuilder builder = new StringBuilder("Yas et Moi \n \n");
+        final StringBuilder builder = new StringBuilder("Yas et Moi \n \n");
 
-        List<Action> currentMenu = engine.getCurrentMenu();
+        final List<Action> currentMenu = engine.getCurrentMenu();
 
         for (int i = 0; i < currentMenu.size(); i++) {
-            Action action = currentMenu.get(i);
-            String title = action.getTitle();
+            final Action action = currentMenu.get(i);
+            final String title = action.getTitle();
 
-            if ("Pejy manaraka".equals(title) && !currentMenu.isEmpty() && currentMenu.get(0).getTitle().equals("MVOLA")) {
+            if ("Pejy manaraka".equals(title) &&
+                    !currentMenu.isEmpty() &&
+                    currentMenu.get(0).getTitle().equals("MVOLA")) {
                 builder.append("0 ").append(title).append("\n");
-            } else if ("Pejy aloha".equals(title) && !currentMenu.isEmpty() && currentMenu.get(0).getTitle().equals("Mon identité")) {
+            } else if ("Pejy aloha".equals(title) && !currentMenu.isEmpty() &&
+                    currentMenu.get(0).getTitle().equals("Mon identité")) {
                 builder.append("00 ").append(title).append("\n");
             } else {
                 builder.append((i + 1)).append(" ").append(title).append("\n");
@@ -92,7 +100,7 @@ public class USSDgui extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            USSDgui app = new USSDgui();
+            final USSDgui app = new USSDgui();
             app.setVisible(true);
         });
     }
