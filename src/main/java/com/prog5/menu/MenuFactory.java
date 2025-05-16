@@ -15,7 +15,14 @@ public class MenuFactory {
         mvola.addSubMenu(new MenuItem("Transferer Argent(vers toute destination)", MvolaActions::transfererArgent));
         mvola.addSubMenu(new MenuItem("MVola Credit ou Epargne", MvolaActions::mvolaCredit));
         mvola.addSubMenu(new MenuItem("Retrait d'argent", MvolaActions::retirerArgent));
-        mvola.addSubMenu(new MenuItem("Page suivante", engine::navigateToMvolaSecondMenu));
+
+        mvola.addSubMenu(new MenuItem("Mon Compte", MvolaActions::monCompte));
+        mvola.addSubMenu(new MenuItem("Recevoir de l'argent", MvolaActions::recevoirArgent));
+        mvola.addSubMenu(new MenuItem("Banques et Micro-Finances", MvolaActions::banquesEtMicroFinances));
+        mvola.addSubMenu(new MenuItem("Menu principal", () -> {
+            engine.menuStack.clear();
+            engine.currentMenu = engine.mainMenu;
+        }));
 
         mainMenu.add(mvola);
         mainMenu.add(new MenuItem("Rappelle moi", RappelActions::rappelleMoi));
@@ -24,29 +31,10 @@ public class MenuFactory {
         mainMenu.add(new MenuItem("Tolotra", YasActions::tolotra));
         mainMenu.add(new MenuItem("Produits et Divertissement", () -> {}));
         mainMenu.add(new MenuItem("Banky sy Micro-finances", () -> {}));
-        mainMenu.add(new MenuItem("Pejy manaraka", engine::navigateToSecondMenu));
+
+        mainMenu.add(new MenuItem("Mon identité", YasActions::monIdentite));
+        mainMenu.add(new MenuItem("Configurer mon mobile", YasActions::configurerMobile));
 
         return mainMenu;
-    }
-
-    public static List<Action> getSecondMenu(USSDEngine engine) {
-        final List<Action> secondMenu = new ArrayList<>();
-        secondMenu.add(new MenuItem("Mon identité", YasActions::monIdentite));
-        secondMenu.add(new MenuItem("Configurer mon mobile", YasActions::configurerMobile));
-        secondMenu.add(new MenuItem("Pejy aloha", engine::goBack));
-        return secondMenu;
-    }
-
-    public static List<Action> getMvolaSecondMenu(USSDEngine engine){
-        final List<Action> mvolaSecondMenu = new ArrayList<>();
-        mvolaSecondMenu.add(new MenuItem("Mon Compte", MvolaActions::monCompte));
-        mvolaSecondMenu.add(new MenuItem("Recevoir de l'argent", MvolaActions::recevoirArgent));
-        mvolaSecondMenu.add(new MenuItem("Banques et Micro-Finances", MvolaActions::banquesEtMicroFinances));
-        mvolaSecondMenu.add(new MenuItem("Page precedente", engine::goBack));
-        mvolaSecondMenu.add(new MenuItem("**Menu principal", () -> {
-            engine.menuStack.clear();
-            engine.currentMenu = engine.mainMenu;
-        }));
-        return mvolaSecondMenu;
     }
 }

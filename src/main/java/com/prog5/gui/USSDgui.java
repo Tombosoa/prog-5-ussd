@@ -23,6 +23,7 @@ public class USSDgui extends JFrame {
 
     public USSDgui() {
         engine = new USSDEngine();
+
         setTitle("Simulateur USSD");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300, 300);
@@ -34,9 +35,10 @@ public class USSDgui extends JFrame {
         displayArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         add(new JScrollPane(displayArea), BorderLayout.CENTER);
 
-        final JPanel inputPanel = new JPanel(new BorderLayout());
         inputField = new JTextField();
         inputField.setFont(new Font("Monospaced", Font.PLAIN, 14));
+
+        final JPanel inputPanel = new JPanel(new BorderLayout());
         inputPanel.add(inputField, BorderLayout.CENTER);
 
         final JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
@@ -50,6 +52,9 @@ public class USSDgui extends JFrame {
         bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        sendButton.addActionListener(e -> processInput());
+        cancelButton.addActionListener(e -> System.exit(0));
+
         inputField.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -57,10 +62,6 @@ public class USSDgui extends JFrame {
                 }
             }
         });
-
-        sendButton.addActionListener(e -> processInput());
-
-        cancelButton.addActionListener(e -> System.exit(0));
 
         updateDisplay();
     }
@@ -75,24 +76,22 @@ public class USSDgui extends JFrame {
     }
 
     private void updateDisplay() {
-        final StringBuilder builder = new StringBuilder("Yas et Moi \n \n");
+        final StringBuilder builder = new StringBuilder("Yas et Moi\n\n");
 
-        final List<Action> currentMenu = engine.getCurrentMenu();
+        final List<Action> menu = engine.currentMenu;
+        final int startIndex = engine.currentPage * USSDEngine.PAGE_SIZE;
+        final int endIndex = Math.min(startIndex + USSDEngine.PAGE_SIZE, menu.size());
 
-        for (int i = 0; i < currentMenu.size(); i++) {
-            final Action action = currentMenu.get(i);
-            final String title = action.getTitle();
+        for (int i = startIndex; i < endIndex; i++) {
+            builder.append((i + 1)).append(" ").append(menu.get(i).getTitle()).append("\n");
+        }
 
-            if ("Pejy manaraka".equals(title) &&
-                    !currentMenu.isEmpty() &&
-                    currentMenu.get(0).getTitle().equals("MVOLA")) {
-                builder.append("0 ").append(title).append("\n");
-            } else if ("Pejy aloha".equals(title) && !currentMenu.isEmpty() &&
-                    currentMenu.get(0).getTitle().equals("Mon identité")) {
-                builder.append("00 ").append(title).append("\n");
-            } else {
-                builder.append((i + 1)).append(" ").append(title).append("\n");
-            }
+        if (endIndex < menu.size()) {
+            builder.append("0  Page suivante\n");
+        }
+
+        if (engine.currentPage > 0) {
+            builder.append("00 Page précédente\n");
         }
 
         displayArea.setText(builder.toString());
